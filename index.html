@@ -6,143 +6,126 @@
 <title>僑生畢業流向與在地產業貢獻預判</title>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-:root {
-  --salmon:#E8603C; --salmon2:#C94A28; --salmon3:#F4956E;
-  --peach:#FDDCC8; --gold:#D4892A; --bg:#FDF6F2;
-  --white:#FFFFFF; --border:#EAD9CF; --text:#2E1A0E; --muted:#8A7060; --dark:#5C2D10;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --salmon:#E8603C;--salmon2:#C94A28;--salmon3:#F4956E;
+  --peach:#FDDCC8;--gold:#D4892A;--bg:#FDF6F2;
+  --white:#FFFFFF;--border:#EAD9CF;--text:#2E1A0E;--muted:#8A7060;--dark:#5C2D10;
 }
-body { font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
-        background:var(--bg); color:var(--text); min-height:100vh; }
+body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;
+     background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ── Loading ── */
-#loading-screen {
-  position:fixed; inset:0; background:var(--bg); z-index:9999;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem;
+#loading-screen{
+  position:fixed;inset:0;background:var(--bg);z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
 }
-.loading-fish { font-size:3rem; animation:swim 1.5s ease-in-out infinite; }
-@keyframes swim { 0%,100%{transform:translateX(-10px)} 50%{transform:translateX(10px)} }
-.loading-text { font-size:14px; color:var(--muted); }
-.loading-bar { width:200px; height:4px; background:var(--peach); border-radius:4px; overflow:hidden; }
-.loading-fill { height:100%; background:var(--salmon); border-radius:4px;
-                 animation:fill 2s ease-in-out infinite; }
-@keyframes fill { 0%{width:0%} 100%{width:100%} }
+.loading-fish{font-size:3rem;animation:swim 1.5s ease-in-out infinite}
+@keyframes swim{0%,100%{transform:translateX(-10px)}50%{transform:translateX(10px)}}
+.loading-text{font-size:14px;color:var(--muted)}
+.loading-bar{width:200px;height:4px;background:var(--peach);border-radius:4px;overflow:hidden}
+.loading-fill{height:100%;background:var(--salmon);border-radius:4px;animation:fill 2s ease-in-out infinite}
+@keyframes fill{0%{width:0%}100%{width:100%}}
 
-/* ── Header ── */
-header {
+header{
   background:linear-gradient(135deg,#7A1E05 0%,#C94A28 55%,#E8603C 100%);
-  color:#fff; padding:1.2rem 2rem;
-  display:flex; align-items:center; gap:1rem;
+  color:#fff;padding:1.2rem 2rem;
+  display:flex;align-items:center;gap:1rem;
   box-shadow:0 3px 16px rgba(180,50,20,.3);
 }
-.fish-icon { font-size:2rem; }
-header h1 { font-size:1.2rem; font-weight:700; }
-header .sub { font-size:0.75rem; opacity:0.75; margin-top:3px; }
+.fish-icon{font-size:2rem}
+header h1{font-size:1.2rem;font-weight:700}
+header .sub{font-size:0.75rem;opacity:0.75;margin-top:3px}
 
-/* ── Filter Bar ── */
-.filter-bar {
-  background:var(--white); border-bottom:1.5px solid var(--border);
-  padding:.65rem 2rem; display:flex; align-items:center; gap:.9rem; flex-wrap:wrap;
-  position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(180,80,30,.08);
+.filter-bar{
+  background:var(--white);border-bottom:1.5px solid var(--border);
+  padding:.65rem 2rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+  position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(180,80,30,.08);
 }
-.filter-group { display:flex; flex-direction:column; gap:2px; }
-.filter-label { font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.06em; }
-.filter-hint  { font-size:10px; color:#C0A090; }
-.filter-select {
-  font-size:13px; padding:5px 10px; border:1.5px solid var(--border);
-  border-radius:8px; background:var(--bg); color:var(--text); cursor:pointer;
-  transition:border-color .15s; min-width:130px;
+.filter-group{display:flex;flex-direction:column;gap:2px}
+.filter-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em}
+.filter-hint{font-size:10px;color:#C0A090}
+.filter-select{
+  font-size:13px;padding:5px 10px;border:1.5px solid var(--border);
+  border-radius:8px;background:var(--bg);color:var(--text);cursor:pointer;
+  transition:border-color .15s;min-width:130px;
 }
-.filter-select:focus { outline:none; border-color:var(--salmon); }
-.filter-select[multiple] { max-height:78px; }
-.filter-divider { width:1px; height:28px; background:var(--border); }
-.filter-reset {
-  font-size:12px; color:var(--salmon2); background:none;
-  border:1.5px solid var(--salmon2); border-radius:8px; padding:5px 14px;
-  cursor:pointer; transition:all .15s; font-weight:600;
+.filter-select:focus{outline:none;border-color:var(--salmon)}
+.filter-select[multiple]{max-height:78px}
+.filter-divider{width:1px;height:28px;background:var(--border)}
+.filter-reset{
+  font-size:12px;color:var(--salmon2);background:none;
+  border:1.5px solid var(--salmon2);border-radius:8px;padding:5px 14px;
+  cursor:pointer;transition:all .15s;font-weight:600;
 }
-.filter-reset:hover { background:var(--salmon); color:#fff; border-color:var(--salmon); }
-#filter-status {
-  font-size:11.5px; color:var(--salmon2); margin-left:auto; font-weight:600;
-  padding:4px 10px; background:var(--peach); border-radius:6px; display:none;
+.filter-reset:hover{background:var(--salmon);color:#fff;border-color:var(--salmon)}
+#filter-status{
+  font-size:11.5px;color:var(--salmon2);margin-left:auto;font-weight:600;
+  padding:4px 10px;background:var(--peach);border-radius:6px;display:none;
 }
 
-/* ── Tabs ── */
-.tabs { display:flex; background:var(--white); border-bottom:1.5px solid var(--border);
-         padding:0 2rem; overflow-x:auto; }
-.tab {
-  padding:.8rem 1.3rem; font-size:13px; cursor:pointer;
-  border-bottom:3px solid transparent; color:var(--muted);
-  transition:all .15s; user-select:none; white-space:nowrap;
+.tabs{display:flex;background:var(--white);border-bottom:1.5px solid var(--border);
+      padding:0 2rem;overflow-x:auto}
+.tab{
+  padding:.8rem 1.3rem;font-size:13px;cursor:pointer;
+  border-bottom:3px solid transparent;color:var(--muted);
+  transition:all .15s;user-select:none;white-space:nowrap;
 }
-.tab:hover { color:var(--salmon); background:#FFF3EE; }
-.tab.active { color:var(--salmon2); border-bottom-color:var(--salmon); font-weight:700; }
+.tab:hover{color:var(--salmon);background:#FFF3EE}
+.tab.active{color:var(--salmon2);border-bottom-color:var(--salmon);font-weight:700}
 
-/* ── Pages ── */
-.page { display:none; padding:1.5rem 2rem 4rem; max-width:1160px; margin:0 auto; }
-.page.active { display:block; }
+.page{display:none;padding:1.5rem 2rem 4rem;max-width:1160px;margin:0 auto}
+.page.active{display:block}
 
-/* ── Section Note ── */
-.section-note {
-  font-size:12.5px; color:#5C3020; margin:.5rem 0 1.5rem; line-height:1.7;
+.section-note{
+  font-size:12.5px;color:#5C3020;margin:.5rem 0 1.5rem;line-height:1.7;
   background:linear-gradient(90deg,#FDEEE6,#FDF6F2);
-  padding:10px 14px 10px 16px; border-radius:8px;
+  padding:10px 14px 10px 16px;border-radius:8px;
   border-left:3px solid var(--salmon);
 }
 
-/* ── KPI Cards ── */
-.kpi-row { display:flex; gap:1rem; margin-bottom:1.8rem; flex-wrap:wrap; }
-.kpi {
-  flex:1; min-width:200px; background:var(--white); border-radius:12px;
-  padding:1.1rem 1.3rem; border:1px solid var(--border);
+.kpi-row{display:flex;gap:1rem;margin-bottom:1.8rem;flex-wrap:wrap}
+.kpi{
+  flex:1;min-width:200px;background:var(--white);border-radius:12px;
+  padding:1.1rem 1.3rem;border:1px solid var(--border);
   box-shadow:0 1px 4px rgba(200,80,30,.07);
-  position:relative; overflow:hidden; transition:box-shadow .2s;
+  position:relative;overflow:hidden;transition:box-shadow .2s;
 }
-.kpi::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+.kpi::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
   background:linear-gradient(90deg,var(--salmon),var(--gold));
 }
-.kpi:hover { box-shadow:0 4px 18px rgba(200,80,30,.15); }
-.kpi-icon { font-size:1.4rem; margin-bottom:6px; }
-.kv { font-size:1.4rem; font-weight:800; color:var(--salmon2); margin-bottom:4px; word-break:break-all; line-height:1.2; }
-.kl { font-size:11.5px; color:var(--muted); }
+.kpi:hover{box-shadow:0 4px 18px rgba(200,80,30,.15)}
+.kpi-icon{font-size:1.4rem;margin-bottom:6px}
+.kv{font-size:1.4rem;font-weight:800;color:var(--salmon2);margin-bottom:4px;word-break:break-all;line-height:1.2}
+.kl{font-size:11.5px;color:var(--muted)}
 
-/* ── School Info Panel ── */
-#school-info-panel {
-  display:none; background:linear-gradient(135deg,#FFF3EE,#FDF6F2);
-  border:1.5px solid var(--salmon3); border-radius:12px;
-  padding:1rem 1.3rem; margin-bottom:1.2rem;
+#school-info-panel{
+  display:none;background:linear-gradient(135deg,#FFF3EE,#FDF6F2);
+  border:1.5px solid var(--salmon3);border-radius:12px;
+  padding:1rem 1.3rem;margin-bottom:1.2rem;
 }
-#school-info-panel .sip-title { font-size:13px; font-weight:700; color:var(--salmon2); margin-bottom:8px; }
-#school-info-panel .sip-row { display:flex; gap:1.5rem; flex-wrap:wrap; }
-#school-info-panel .sip-item { font-size:12.5px; color:var(--dark); }
-#school-info-panel .sip-val { font-size:1.3rem; font-weight:800; color:var(--salmon2); display:block; }
+#school-info-panel .sip-title{font-size:13px;font-weight:700;color:var(--salmon2);margin-bottom:8px}
+#school-info-panel .sip-row{display:flex;gap:1.5rem;flex-wrap:wrap}
+#school-info-panel .sip-item{font-size:12.5px;color:var(--dark)}
+#school-info-panel .sip-val{font-size:1.3rem;font-weight:800;color:var(--salmon2);display:block}
 
-/* ── Year Pills ── */
-.year-pill-row { display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; }
-.year-pill {
-  padding:5px 16px; border-radius:20px; font-size:13px; cursor:pointer;
-  border:1.5px solid var(--border); background:var(--white); color:var(--muted);
-  transition:all .15s; user-select:none;
+.year-pill-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.year-pill{
+  padding:5px 16px;border-radius:20px;font-size:13px;cursor:pointer;
+  border:1.5px solid var(--border);background:var(--white);color:var(--muted);
+  transition:all .15s;user-select:none;
 }
-.year-pill:hover { border-color:var(--salmon); color:var(--salmon); }
-.year-pill.active { background:var(--salmon); color:#fff; border-color:var(--salmon); font-weight:700; }
-.year-pill.all-pill { border-style:dashed; }
-.scatter-school-tag {
-  display:inline-block; background:var(--peach); color:var(--salmon2);
-  font-size:11px; font-weight:700; border-radius:6px; padding:2px 8px; margin-bottom:6px;
-}
-
-/* ── Power BI 提示 ── */
-.pbi-note {
-  font-size:11px; color:var(--muted); text-align:center; padding:.5rem;
-  background:var(--peach); border-radius:6px; margin-bottom:1rem;
+.year-pill:hover{border-color:var(--salmon);color:var(--salmon)}
+.year-pill.active{background:var(--salmon);color:#fff;border-color:var(--salmon);font-weight:700}
+.year-pill.all-pill{border-style:dashed}
+.scatter-school-tag{
+  display:inline-block;background:var(--peach);color:var(--salmon2);
+  font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px;margin-bottom:6px;
 }
 </style>
 </head>
 <body>
 
-<!-- 載入畫面 -->
 <div id="loading-screen">
   <div class="loading-fish">🐟</div>
   <div class="loading-text">資料載入中，請稍候…</div>
@@ -186,23 +169,21 @@ header .sub { font-size:0.75rem; opacity:0.75; margin-top:3px; }
   <div class="tab" onclick="sw('p4',this)">④ 畢業流向桑基圖</div>
 </div>
 
-<!-- 頁一 -->
 <div class="page active" id="tab-p1">
-  <p class="section-note">呈現境外生在各行業的實習人次分布與趨勢。<strong>選擇學年度或學校後，圖表與 KPI（含僑生人數）即時更新。</strong></p>
+  <p class="section-note">呈現境外生在各行業的實習人次分布與趨勢。<strong>選擇學年度或學校後，圖表與 KPI 即時更新。</strong></p>
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-icon">📊</div><div class="kv" id="kv-total">800,839</div><div class="kl">總實習人次</div></div>
-    <div class="kpi"><div class="kpi-icon">👨‍🎓</div><div class="kv" id="kv-students">480,053</div><div class="kl">僑生人數（境外學位生）</div></div>
-    <div class="kpi"><div class="kpi-icon">🏭</div><div class="kv" id="kv-top-ind" style="font-size:1rem">醫療保健及社會工作服務業</div><div class="kl">最大實習行業</div></div>
-    <div class="kpi"><div class="kpi-icon">🏫</div><div class="kv" id="kv-top-school" style="font-size:.95rem">新生醫護管理專科學校</div><div class="kl">實習人次最多學校</div></div>
+    <div class="kpi"><div class="kpi-icon">📊</div><div class="kv" id="kv-total">—</div><div class="kl">總實習人次</div></div>
+    <div class="kpi"><div class="kpi-icon">👨‍🎓</div><div class="kv" id="kv-students">—</div><div class="kl">僑生人數（境外學位生）</div></div>
+    <div class="kpi"><div class="kpi-icon">🏭</div><div class="kv" id="kv-top-ind" style="font-size:1rem">—</div><div class="kl">最大實習行業</div></div>
+    <div class="kpi"><div class="kpi-icon">🏫</div><div class="kv" id="kv-top-school" style="font-size:.95rem">—</div><div class="kl">實習人次最多學校</div></div>
   </div>
   <div id="p1-bar-container"></div>
   <div id="p1-line-container"></div>
   <div id="p1-heat-container"></div>
 </div>
 
-<!-- 頁二 -->
 <div class="page" id="tab-p2">
-  <p class="section-note">各系所「在學境外生規模（X軸）」vs「實習參與率（Y軸）」四象限分析。<strong>選取學校後，該校系所以橘色高亮顯示。</strong></p>
+  <p class="section-note">各系所「在學境外生規模（X軸）」vs「實習參與率（Y軸）」四象限。<strong>選取學校後該校系所橘色高亮。</strong></p>
   <div id="school-info-panel">
     <div class="sip-title" id="sip-school-name">—</div>
     <div class="sip-row" id="sip-items"></div>
@@ -217,29 +198,36 @@ header .sub { font-size:0.75rem; opacity:0.75; margin-top:3px; }
   <div id="scatter-canvas"></div>
 </div>
 
-<!-- 頁三 -->
 <div class="page" id="tab-p3">
-  <p class="section-note">畢業僑外生佔全台外籍技術人才的比例，呈現對各在地產業的勞動力貢獻。數字越高代表僑外生在該產業越不可或缺。</p>
+  <p class="section-note">畢業僑外生佔全台外籍技術人才的比例，呈現對各在地產業的勞動力貢獻。</p>
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-icon">🏭</div><div class="kv">43.4%</div><div class="kl">製造業在地貢獻度（114年）</div></div>
+    <div class="kpi"><div class="kpi-icon">🏭</div><div class="kv" id="kv-mfg">—</div><div class="kl" id="kl-mfg">製造業在地貢獻度</div></div>
   </div>
   <div id="p3-funnel-container"></div>
   <div id="p3-trend-container"></div>
 </div>
 
-<!-- 頁四 -->
 <div class="page" id="tab-p4">
-  <p class="section-note">境外生實習流向桑基圖。<strong>預設顯示 Top 15 學校；選取學校或學年度後即時更新。</strong></p>
+  <p class="section-note">境外生實習流向桑基圖。<strong>預設 Top 15 學校；選取學校或學年度後即時更新。</strong></p>
   <div id="sankey-canvas"></div>
 </div>
 
 <script>
-// ════ 全域資料（fetch 載入後填入）════
-let FI_DATA = [], FA_KPI = [], SCATTER_DATA = {}, FL_DATA = [], SANKEY_RAW = [];
-const ALL_SCHOOLS = ["世新大學", "中信學校財團法人中信金融管理學院", "中信金學校財團法人中信科技大學", "中原大學", "中國文化大學", "中國科技大學", "中國醫藥大學", "中山醫學大學", "中州學校財團法人中州科技大學", "中臺科技大學", "中華大學學校財團法人中華大學", "中華學校財團法人中華科技大學", "中華福音神學研究學院", "中華醫事科技大學", "亞東學校財團法人亞東科技大學", "亞洲大學", "仁德醫護管理專科學校", "佛光大學", "修平學校財團法人修平科技大學", "健行學校財團法人健行科技大學", "僑光科技大學", "元智大學", "光宇學校財團法人元培醫事科技大學", "南亞科技學校財團法人南亞技術學院", "南臺學校財團法人南臺科技大學", "南華大學", "南開科技大學", "台北海洋學校財團法人台北海洋科技大學", "台南家專學校財團法人台南應用科技大學", "台灣基督長老教會南神神學院", "台灣首府學校財團法人台灣首府大學", "台神學校財團法人台灣神學研究學院", "台鋼學校財團法人台鋼科技大學", "吳鳳科技大學", "和春技術學院", "嘉藥學校財團法人嘉南藥理大學", "國立中央大學", "國立中山大學", "國立中正大學", "國立中興大學", "國立勤益科技大學", "國立嘉義大學", "國立宜蘭大學", "國立屏東大學", "國立屏東科技大學", "國立彰化師範大學", "國立成功大學", "國立政治大學", "國立暨南國際大學", "國立東華大學", "國立清華大學", "國立澎湖科技大學", "國立聯合大學", "國立臺中教育大學", "國立臺中科技大學", "國立臺北商業大學", "國立臺北大學", "國立臺北教育大學", "國立臺北科技大學", "國立臺北藝術大學", "國立臺北護理健康大學", "國立臺南大學", "國立臺南藝術大學", "國立臺南護理專科學校", "國立臺東大學", "國立臺東專科學校", "國立臺灣大學", "國立臺灣師範大學", "國立臺灣戲曲學院", "國立臺灣海洋大學", "國立臺灣科技大學", "國立臺灣藝術大學", "國立臺灣體育運動大學", "國立虎尾科技大學", "國立金門大學", "國立陽明交通大學", "國立雲林科技大學", "國立體育大學", "國立高雄大學", "國立高雄師範大學", "國立高雄科技大學", "國立高雄餐旅大學", "城市學校財團法人臺北城市科技大學", "大仁科技大學", "大同大學", "大同技術學院", "大漢技術學院", "大華學校財團法人敏實科技大學", "大葉大學", "宏國學校財團法人宏國德霖科技大學", "實踐大學", "崇仁醫護管理專科學校", "崇右學校財團法人崇右影藝科技大學", "崑山科技大學", "嶺東科技大學", "康寧學校財團法人康寧大學", "廣亞學校財團法人育達科技大學", "建國科技大學", "弘光科技大學", "德明財經科技大學", "德育學校財團法人德育護理健康學院", "慈惠醫護管理專科學校", "慈濟學校財團法人慈濟大學", "慈濟學校財團法人慈濟科技大學", "敏惠醫護管理專科學校", "文藻學校財團法人文藻外語大學", "新生醫護管理專科學校", "明志科技大學", "明新學校財團法人明新科技大學", "明道學校財團法人明道大學", "景文科技大學", "朝陽科技大學", "東南科技大學", "東吳大學", "東方學校財團法人東方設計大學", "東海大學", "樹人醫護管理專科學校", "樹德科技大學", "正修學校財團法人正修科技大學", "淡江大學學校財團法人淡江大學", "玄奘大學", "環球學校財團法人環球科技大學", "真理大學", "美和學校財團法人美和科技大學", "義守大學", "耕莘健康管理專科學校", "聖母醫護管理專科學校", "聖約翰科技大學", "育英醫護管理專科學校", "致理學校財團法人致理科技大學", "臺北基督學院", "臺北市立大學", "臺北醫學大學", "華夏學校財團法人華夏科技大學", "華梵學校財團法人華梵大學", "萬能學校財團法人萬能科技大學", "財團法人一貫道天皇基金會一貫道天皇學院", "輔仁大學", "輔英科技大學", "逢甲大學", "醒吾學校財團法人醒吾科技大學", "銘傳大學", "長庚大學", "長庚學校財團法人長庚科技大學", "長榮大學", "開南大學", "靜宜大學", "馬偕學校財團法人馬偕醫學大學", "馬偕學校財團法人馬偕醫學院", "馬偕學校財團法人馬偕醫護管理專科學校", "高雄醫學大學", "黎明技術學院", "龍華科技大學"];
-const ALL_YEARS   = ["110", "111", "112", "113"];
+// ══ 嵌入式初始變數（Python 產生）══
 
-// ════ 色彩 ════
+  const ALL_SCHOOLS = ["世新大學", "中信學校財團法人中信金融管理學院", "中信金學校財團法人中信科技大學", "中原大學", "中國文化大學", "中國科技大學", "中國醫藥大學", "中山醫學大學", "中州學校財團法人中州科技大學", "中臺科技大學", "中華大學學校財團法人中華大學", "中華學校財團法人中華科技大學", "中華福音神學研究學院", "中華醫事科技大學", "亞東學校財團法人亞東科技大學", "亞洲大學", "仁德醫護管理專科學校", "佛光大學", "修平學校財團法人修平科技大學", "健行學校財團法人健行科技大學", "僑光科技大學", "元智大學", "光宇學校財團法人元培醫事科技大學", "南亞科技學校財團法人南亞技術學院", "南臺學校財團法人南臺科技大學", "南華大學", "南開科技大學", "台北海洋學校財團法人台北海洋科技大學", "台南家專學校財團法人台南應用科技大學", "台灣基督長老教會南神神學院", "台灣首府學校財團法人台灣首府大學", "台神學校財團法人台灣神學研究學院", "台鋼學校財團法人台鋼科技大學", "吳鳳科技大學", "和春技術學院", "嘉藥學校財團法人嘉南藥理大學", "國立中央大學", "國立中山大學", "國立中正大學", "國立中興大學", "國立勤益科技大學", "國立嘉義大學", "國立宜蘭大學", "國立屏東大學", "國立屏東科技大學", "國立彰化師範大學", "國立成功大學", "國立政治大學", "國立暨南國際大學", "國立東華大學", "國立清華大學", "國立澎湖科技大學", "國立聯合大學", "國立臺中教育大學", "國立臺中科技大學", "國立臺北商業大學", "國立臺北大學", "國立臺北教育大學", "國立臺北科技大學", "國立臺北藝術大學", "國立臺北護理健康大學", "國立臺南大學", "國立臺南藝術大學", "國立臺南護理專科學校", "國立臺東大學", "國立臺東專科學校", "國立臺灣大學", "國立臺灣師範大學", "國立臺灣戲曲學院", "國立臺灣海洋大學", "國立臺灣科技大學", "國立臺灣藝術大學", "國立臺灣體育運動大學", "國立虎尾科技大學", "國立金門大學", "國立陽明交通大學", "國立雲林科技大學", "國立體育大學", "國立高雄大學", "國立高雄師範大學", "國立高雄科技大學", "國立高雄餐旅大學", "城市學校財團法人臺北城市科技大學", "大仁科技大學", "大同大學", "大同技術學院", "大漢技術學院", "大華學校財團法人敏實科技大學", "大葉大學", "宏國學校財團法人宏國德霖科技大學", "實踐大學", "崇仁醫護管理專科學校", "崇右學校財團法人崇右影藝科技大學", "崑山科技大學", "嶺東科技大學", "康寧學校財團法人康寧大學", "廣亞學校財團法人育達科技大學", "建國科技大學", "弘光科技大學", "德明財經科技大學", "德育學校財團法人德育護理健康學院", "慈惠醫護管理專科學校", "慈濟學校財團法人慈濟大學", "慈濟學校財團法人慈濟科技大學", "敏惠醫護管理專科學校", "文藻學校財團法人文藻外語大學", "新生醫護管理專科學校", "明志科技大學", "明新學校財團法人明新科技大學", "明道學校財團法人明道大學", "景文科技大學", "朝陽科技大學", "東南科技大學", "東吳大學", "東方學校財團法人東方設計大學", "東海大學", "樹人醫護管理專科學校", "樹德科技大學", "正修學校財團法人正修科技大學", "淡江大學學校財團法人淡江大學", "玄奘大學", "環球學校財團法人環球科技大學", "真理大學", "美和學校財團法人美和科技大學", "義守大學", "耕莘健康管理專科學校", "聖母醫護管理專科學校", "聖約翰科技大學", "育英醫護管理專科學校", "致理學校財團法人致理科技大學", "臺北基督學院", "臺北市立大學", "臺北醫學大學", "華夏學校財團法人華夏科技大學", "華梵學校財團法人華梵大學", "萬能學校財團法人萬能科技大學", "財團法人一貫道天皇基金會一貫道天皇學院", "輔仁大學", "輔英科技大學", "逢甲大學", "醒吾學校財團法人醒吾科技大學", "銘傳大學", "長庚大學", "長庚學校財團法人長庚科技大學", "長榮大學", "開南大學", "靜宜大學", "馬偕學校財團法人馬偕醫學大學", "馬偕學校財團法人馬偕醫學院", "馬偕學校財團法人馬偕醫護管理專科學校", "高雄醫學大學", "黎明技術學院", "龍華科技大學"];
+  const ALL_YEARS   = ["110", "111", "112", "113"];
+  const INIT_TOTAL_INTERN   = 800839;
+  const INIT_TOTAL_STUDENTS = 480053;
+  const INIT_TOP_IND    = "醫療保健及社會工作服務業";
+  const INIT_TOP_SCHOOL = "新生醫護管理專科學校";
+  const INIT_MFG_CONTRIB = 0.4344;
+  const FL_LATEST_YR = 114;
+
+
+// ══ 全域資料 ══
+let FI_DATA = [], FA_KPI = [], SCATTER_DATA = {}, FL_DATA = [];
+
 const IND_COLORS = {
   "醫療保健及社會工作服務業":"#E8603C","製造業":"#378ADD",
   "住宿及餐飲業":"#C94A28","教育業":"#7F77DD",
@@ -253,339 +241,375 @@ const IND_COLORS = {
   "電力及燃氣供應業":"#444441"
 };
 const iColor = n => IND_COLORS[n] || '#999590';
-const groupSum = (data,key,val) => {
-  const m={};
-  data.forEach(r=>{ m[r[key]]=(m[r[key]]||0)+r[val]; });
+const groupSum = (data, key, val) => {
+  const m = {};
+  data.forEach(r => { m[r[key]] = (m[r[key]] || 0) + r[val]; });
   return m;
 };
 
-// ════ 初始化篩選器 ════
+// ══ 篩選器初始化 ══
 const selYear   = document.getElementById('sel-year');
 const selSchool = document.getElementById('sel-school');
-ALL_YEARS.forEach(y=>{ const o=document.createElement('option'); o.value=y; o.textContent=y+' 學年度'; selYear.appendChild(o); });
-ALL_SCHOOLS.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; selSchool.appendChild(o); });
+
+ALL_YEARS.forEach(y => {
+  const o = document.createElement('option');
+  o.value = y; o.textContent = y + ' 學年度';
+  selYear.appendChild(o);
+});
+ALL_SCHOOLS.forEach(s => {
+  const o = document.createElement('option');
+  o.value = s; o.textContent = s;
+  selSchool.appendChild(o);
+});
 selYear.addEventListener('change', applyFilters);
 selSchool.addEventListener('change', applyFilters);
 
-const getYears   = () => { const v=Array.from(selYear.selectedOptions).map(o=>o.value);   return v.includes('all')||v.length===0?[]:v; };
-const getSchools = () => { const v=Array.from(selSchool.selectedOptions).map(o=>o.value); return v.includes('all')||v.length===0?[]:v; };
+const getYears   = () => { const v = Array.from(selYear.selectedOptions).map(o => o.value);   return v.includes('all') || v.length === 0 ? [] : v; };
+const getSchools = () => { const v = Array.from(selSchool.selectedOptions).map(o => o.value); return v.includes('all') || v.length === 0 ? [] : v; };
 
-// ════ 頁籤 ════
-function sw(id,el) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+// ══ 頁籤 ══
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('tab-'+id).classList.add('active');
-  if(id==='p2') { updateSchoolPanel(getYears(),getSchools()); renderScatter(); }
-  if(id==='p3') renderP3();
-  if(id==='p4') renderSankey();
+  document.getElementById('tab-' + id).classList.add('active');
+  const years = getYears(), schools = getSchools();
+  if (id === 'p2') { updateSchoolPanel(years, schools); renderScatter(); }
+  if (id === 'p3') renderP3();
+  if (id === 'p4') renderSankey();
 }
 
-// ════ 套用篩選 ════
+// ══ 套用篩選 ══
 function applyFilters() {
-  const years=getYears(), schools=getSchools();
-  const parts=[];
-  if(years.length)   parts.push(years.join('、')+' 學年度');
-  if(schools.length) parts.push(schools.length>2?schools.slice(0,2).join('、')+' 等'+schools.length+'所':schools.join('、'));
-  const st=document.getElementById('filter-status');
-  if(parts.length){ st.textContent='篩選中：'+parts.join(' ｜ '); st.style.display='inline-block'; }
-  else st.style.display='none';
+  const years = getYears(), schools = getSchools();
+  const parts = [];
+  if (years.length)   parts.push(years.join('、') + ' 學年度');
+  if (schools.length) parts.push(schools.length > 2 ? schools.slice(0,2).join('、') + ' 等' + schools.length + '所' : schools.join('、'));
+  const st = document.getElementById('filter-status');
+  if (parts.length) { st.textContent = '篩選中：' + parts.join(' ｜ '); st.style.display = 'inline-block'; }
+  else st.style.display = 'none';
 
-  let fi=[...FI_DATA];
-  if(years.length)   fi=fi.filter(r=>years.includes(String(r['學年度'])));
-  if(schools.length) fi=fi.filter(r=>schools.includes(r['學校名稱']));
-  updateP1(fi,years,schools);
+  let fi = [...FI_DATA];
+  if (years.length)   fi = fi.filter(r => years.includes(String(r['學年度'])));
+  if (schools.length) fi = fi.filter(r => schools.includes(r['學校名稱']));
+  updateP1(fi, years, schools);
 
-  // 如果目前在頁二/三/四也更新
-  const active=document.querySelector('.page.active').id;
-  if(active==='tab-p2') { updateSchoolPanel(years,schools); renderScatter(); }
-  if(active==='tab-p3') renderP3();
-  if(active==='tab-p4') renderSankey();
+  const activeId = document.querySelector('.page.active').id;
+  if (activeId === 'tab-p2') { updateSchoolPanel(years, schools); renderScatter(); }
+  if (activeId === 'tab-p3') renderP3();
+  if (activeId === 'tab-p4') renderSankey();
 }
 
-// ════ 頁一 ════
+// ══ 頁一 ══
 function updateP1(data, years, schools) {
-  const indSum  = groupSum(data,'標準行業別','實習人次');
-  const indNames= Object.keys(indSum).sort((a,b)=>indSum[a]-indSum[b]);
-  const yLabel  = years.length?years.join('、'):'110–113';
+  const indSum   = groupSum(data, '標準行業別', '實習人次');
+  const indNames = Object.keys(indSum).sort((a,b) => indSum[a] - indSum[b]);
+  const yLabel   = years.length ? years.join('、') : '110–113';
 
-  Plotly.react('p1-bar-container',[{
-    type:'bar',orientation:'h',
-    x:indNames.map(n=>indSum[n]),y:indNames,
-    marker:{color:indNames.map(iColor)},
-    text:indNames.map(n=>indSum[n].toLocaleString()),textposition:'outside',
-    hovertemplate:'%{y}<br>實習人次：%{x:,}<extra></extra>',
-  }],{
-    title:{text:`各行業實習人次（${yLabel} 年${schools.length?' | 已篩選學校':''})`,font:{size:16},x:0.02},
-    xaxis_title:'實習人次',plot_bgcolor:'#FDF6F2',paper_bgcolor:'#FFFFFF',
-    margin:{l:180,r:120,t:60,b:40},height:500,
+  Plotly.react('p1-bar-container', [{
+    type: 'bar', orientation: 'h',
+    x: indNames.map(n => indSum[n]),
+    y: indNames,
+    marker: { color: indNames.map(iColor) },
+    text: indNames.map(n => indSum[n].toLocaleString()),
+    textposition: 'outside',
+    hovertemplate: '%{y}<br>實習人次：%{x:,}<extra></extra>',
+  }], {
+    title: { text: '各行業實習人次（' + yLabel + ' 年' + (schools.length ? ' | 已篩選學校' : '') + ')', font: { size: 16 }, x: 0.02 },
+    xaxis_title: '實習人次', plot_bgcolor: '#FDF6F2', paper_bgcolor: '#FFFFFF',
+    margin: { l: 180, r: 120, t: 60, b: 40 }, height: 500,
   });
 
-  const allYrs=years.length?years.map(Number):[110,111,112,113];
-  const byIY={};
-  data.forEach(r=>{ if(!byIY[r['標準行業別']]) byIY[r['標準行業別']]={}; byIY[r['標準行業別']][r['學年度']]=(byIY[r['標準行業別']][r['學年度']]||0)+r['實習人次']; });
-  const totByI={};
-  Object.keys(byIY).forEach(k=>{ totByI[k]=Object.values(byIY[k]).reduce((a,b)=>a+b,0); });
-  const top6=Object.keys(totByI).sort((a,b)=>totByI[b]-totByI[a]).slice(0,6);
-  Plotly.react('p1-line-container',top6.map(ind=>(({
-    type:'scatter',mode:'lines+markers',
-    x:allYrs,y:allYrs.map(yr=>(byIY[ind]||{})[yr]||0),
-    name:ind,line:{color:iColor(ind),width:2.5},marker:{size:7},
-    hovertemplate:ind+'<br>%{x}年：%{y:,} 人次<extra></extra>',
-  })))),{
-    title:{text:`Top 6 行業趨勢（${yLabel})`,font:{size:16},x:0.02},
-    xaxis:{tickvals:allYrs,title:'學年度'},yaxis_title:'實習人次',
-    legend:{orientation:'v',x:1.01,y:1},
-    plot_bgcolor:'#FDF6F2',paper_bgcolor:'#FFFFFF',
-    margin:{l:60,r:200,t:60,b:40},height:420,
+  const allYrs = years.length ? years.map(Number) : [110, 111, 112, 113];
+  const byIY = {};
+  data.forEach(r => {
+    if (!byIY[r['標準行業別']]) byIY[r['標準行業別']] = {};
+    byIY[r['標準行業別']][r['學年度']] = (byIY[r['標準行業別']][r['學年度']] || 0) + r['實習人次'];
+  });
+  const totByI = {};
+  Object.keys(byIY).forEach(k => { totByI[k] = Object.values(byIY[k]).reduce((a,b) => a + b, 0); });
+  const top6 = Object.keys(totByI).sort((a,b) => totByI[b] - totByI[a]).slice(0, 6);
+
+  Plotly.react('p1-line-container', top6.map(ind => ({
+    type: 'scatter', mode: 'lines+markers',
+    x: allYrs, y: allYrs.map(yr => (byIY[ind] || {})[yr] || 0),
+    name: ind, line: { color: iColor(ind), width: 2.5 }, marker: { size: 7 },
+    hovertemplate: ind + '<br>%{x}年：%{y:,} 人次<extra></extra>',
+  })), {
+    title: { text: 'Top 6 行業趨勢（' + yLabel + ')', font: { size: 16 }, x: 0.02 },
+    xaxis: { tickvals: allYrs, title: '學年度' }, yaxis_title: '實習人次',
+    legend: { orientation: 'v', x: 1.01, y: 1 },
+    plot_bgcolor: '#FDF6F2', paper_bgcolor: '#FFFFFF',
+    margin: { l: 60, r: 200, t: 60, b: 40 }, height: 420,
   });
 
-  // KPI
-  document.getElementById('kv-total').textContent=data.reduce((s,r)=>s+r['實習人次'],0).toLocaleString();
-  let fa=[...FA_KPI];
-  if(years.length)   fa=fa.filter(r=>years.includes(String(r['學年度'])));
-  if(schools.length) fa=fa.filter(r=>schools.includes(r['學校名稱']));
-  document.getElementById('kv-students').textContent=fa.reduce((s,r)=>s+r['境外學位生數小計'],0).toLocaleString();
-  const topInd=Object.keys(indSum).sort((a,b)=>indSum[b]-indSum[a])[0]||'-';
-  document.getElementById('kv-top-ind').textContent=topInd;
-  const schSum=groupSum(data,'學校名稱','實習人次');
-  document.getElementById('kv-top-school').textContent=Object.keys(schSum).sort((a,b)=>schSum[b]-schSum[a])[0]||'-';
+  document.getElementById('kv-total').textContent    = data.reduce((s,r) => s + r['實習人次'], 0).toLocaleString();
+  let fa = [...FA_KPI];
+  if (years.length)   fa = fa.filter(r => years.includes(String(r['學年度'])));
+  if (schools.length) fa = fa.filter(r => schools.includes(r['學校名稱']));
+  document.getElementById('kv-students').textContent  = fa.reduce((s,r) => s + r['境外學位生數小計'], 0).toLocaleString();
+  document.getElementById('kv-top-ind').textContent   = Object.keys(indSum).sort((a,b) => indSum[b] - indSum[a])[0] || '-';
+  const schSum = groupSum(data, '學校名稱', '實習人次');
+  document.getElementById('kv-top-school').textContent = Object.keys(schSum).sort((a,b) => schSum[b] - schSum[a])[0] || '-';
 }
 
-// ════ 頁二 ════
-function updateSchoolPanel(years,schools) {
-  const panel=document.getElementById('school-info-panel');
-  if(!schools.length){ panel.style.display='none'; return; }
-  panel.style.display='block';
-  document.getElementById('sip-school-name').textContent='📍 '+schools.join('、')+'　僑生資料摘要';
-  const yrs=years.length?years.map(Number):[110,111,112,113];
-  const items=document.getElementById('sip-items');
-  items.innerHTML='';
-  yrs.forEach(yr=>{
-    const rows=FA_KPI.filter(r=>schools.includes(r['學校名稱'])&&r['學年度']===yr);
-    const n=rows.reduce((s,r)=>s+r['境外學位生數小計'],0);
-    const div=document.createElement('div'); div.className='sip-item';
-    div.innerHTML=`<span class="sip-val">${n.toLocaleString()}</span>${yr} 學年度 僑生人數`;
+// ══ 熱圖 ══
+function renderHeatmap() {
+  const schSum = groupSum(FI_DATA, '學校名稱', '實習人次');
+  const top20  = Object.keys(schSum).sort((a,b) => schSum[b] - schSum[a]).slice(0, 20);
+  const fi20   = FI_DATA.filter(r => top20.includes(r['學校名稱']));
+  const inds   = [...new Set(fi20.map(r => r['標準行業別']))];
+  const pivot  = {};
+  fi20.forEach(r => {
+    if (!pivot[r['學校名稱']]) pivot[r['學校名稱']] = {};
+    pivot[r['學校名稱']][r['標準行業別']] = (pivot[r['學校名稱']][r['標準行業別']] || 0) + r['實習人次'];
+  });
+  const schools = Object.keys(pivot).sort((a,b) => schSum[b] - schSum[a]);
+  Plotly.react('p1-heat-container', [{
+    type: 'heatmap',
+    z: schools.map(s => inds.map(i => pivot[s][i] || 0)),
+    x: inds, y: schools,
+    colorscale: [[0,'#FDF6F2'],[.3,'#F4956E'],[.7,'#E8603C'],[1,'#7A1E05']],
+    hovertemplate: '學校：%{y}<br>行業：%{x}<br>實習人次：%{z:,}<extra></extra>',
+  }], {
+    title: { text: '產學熱圖：Top 20 學校 × 行業別', font: { size: 16 }, x: 0.02 },
+    xaxis: { tickangle: -40, tickfont: { size: 11 } },
+    yaxis: { tickfont: { size: 11 } },
+    plot_bgcolor: '#FFFFFF', paper_bgcolor: '#FFFFFF',
+    margin: { l: 180, r: 60, t: 60, b: 140 }, height: 550,
+  }, { responsive: true });
+}
+
+// ══ 頁二 ══
+function updateSchoolPanel(years, schools) {
+  const panel = document.getElementById('school-info-panel');
+  if (!schools.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  document.getElementById('sip-school-name').textContent = '📍 ' + schools.join('、') + '　僑生資料摘要';
+  const yrs   = years.length ? years.map(Number) : [110, 111, 112, 113];
+  const items = document.getElementById('sip-items');
+  items.innerHTML = '';
+  yrs.forEach(yr => {
+    const rows = FA_KPI.filter(r => schools.includes(r['學校名稱']) && r['學年度'] === yr);
+    const n    = rows.reduce((s,r) => s + r['境外學位生數小計'], 0);
+    const div  = document.createElement('div');
+    div.className = 'sip-item';
+    div.innerHTML = '<span class="sip-val">' + n.toLocaleString() + '</span>' + yr + ' 學年度 僑生人數';
     items.appendChild(div);
   });
 }
 
-let activeScatterYear='all';
-function selectScatterYear(yr,el) {
-  activeScatterYear=yr;
-  document.querySelectorAll('.year-pill').forEach(p=>p.classList.remove('active'));
+let activeScatterYear = 'all';
+function selectScatterYear(yr, el) {
+  activeScatterYear = yr;
+  document.querySelectorAll('.year-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   renderScatter();
 }
 
 function renderScatter() {
-  const years=getYears(), schools=getSchools();
-  const canvas=document.getElementById('scatter-canvas');
-  canvas.innerHTML='';
-  const yrs=activeScatterYear!=='all'?[activeScatterYear]:years.length?years:['110','111','112','113'];
-  yrs.forEach(yrStr=>{
-    const allPts=SCATTER_DATA[yrStr]||[];
-    if(!allPts.length) return;
-    const highlight=schools.length?allPts.filter(p=>schools.includes(p['學校名稱'])):[];
-    const bg=schools.length?allPts.filter(p=>!schools.includes(p['學校名稱'])):allPts;
-    const allX=allPts.map(p=>p['境外學位生數小計']), allY=allPts.map(p=>p['實習參與率']);
-    const mx=allX.reduce((a,b)=>a+b,0)/allX.length, my=allY.reduce((a,b)=>a+b,0)/allY.length;
-    const xMax=Math.max(...allX)*1.1, yMax=Math.max(...allY)*1.1;
-    const shapes=[
-      {type:'rect',x0:mx,y0:my,x1:xMax,y1:yMax,fillcolor:'rgba(234,243,222,.5)',line:{width:0},layer:'below'},
-      {type:'rect',x0:0,y0:my,x1:mx,y1:yMax,fillcolor:'rgba(230,241,251,.3)',line:{width:0},layer:'below'},
-      {type:'rect',x0:mx,y0:0,x1:xMax,y1:my,fillcolor:'rgba(250,238,218,.3)',line:{width:0},layer:'below'},
-      {type:'rect',x0:0,y0:0,x1:mx,y1:my,fillcolor:'rgba(240,240,240,.3)',line:{width:0},layer:'below'},
-      {type:'line',x0:mx,x1:mx,y0:0,y1:yMax,line:{color:'#AAA',width:1,dash:'dot'}},
-      {type:'line',x0:0,x1:xMax,y0:my,y1:my,line:{color:'#AAA',width:1,dash:'dot'}},
-    ];
-    const traces=[];
-    if(bg.length) traces.push({
-      type:'scatter',mode:'markers',
-      x:bg.map(p=>p['境外學位生數小計']),y:bg.map(p=>p['實習參與率']),
-      marker:{size:6,color:schools.length?'rgba(200,170,155,.35)':'rgba(232,96,60,.5)',line:{width:.5,color:'white'}},
-      customdata:bg.map(p=>[p['學校名稱'],p['系所名稱'],p['實習人次']]),
-      hovertemplate:'<b>%{customdata[0]}</b><br>%{customdata[1]}<br>在學境外生：%{x} 人<br>實習參與率：%{y:.2f}<br>實習人次：%{customdata[2]:,}<extra></extra>',
-      showlegend:false,
+  const years = getYears(), schools = getSchools();
+  const canvas = document.getElementById('scatter-canvas');
+  canvas.innerHTML = '';
+  const yrs = activeScatterYear !== 'all' ? [activeScatterYear] : years.length ? years : ['110','111','112','113'];
+  yrs.forEach(yrStr => {
+    const allPts = SCATTER_DATA[yrStr] || [];
+    if (!allPts.length) return;
+    const highlight = schools.length ? allPts.filter(p => schools.includes(p['學校名稱'])) : [];
+    const bg        = schools.length ? allPts.filter(p => !schools.includes(p['學校名稱'])) : allPts;
+    const allX = allPts.map(p => p['境外學位生數小計']);
+    const allY = allPts.map(p => p['實習參與率']);
+    const mx = allX.reduce((a,b) => a+b, 0) / allX.length;
+    const my = allY.reduce((a,b) => a+b, 0) / allY.length;
+    const xMax = Math.max(...allX) * 1.1;
+    const yMax = Math.max(...allY) * 1.1;
+    const traces = [];
+    if (bg.length) traces.push({
+      type: 'scatter', mode: 'markers',
+      x: bg.map(p => p['境外學位生數小計']), y: bg.map(p => p['實習參與率']),
+      marker: { size: 6, color: schools.length ? 'rgba(200,170,155,.35)' : 'rgba(232,96,60,.5)', line: { width: .5, color: 'white' } },
+      customdata: bg.map(p => [p['學校名稱'], p['系所名稱'], p['實習人次']]),
+      hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]}<br>在學境外生：%{x} 人<br>實習參與率：%{y:.2f}<br>實習人次：%{customdata[2]:,}<extra></extra>',
+      showlegend: false,
     });
-    if(highlight.length) traces.push({
-      type:'scatter',mode:'markers+text',
-      x:highlight.map(p=>p['境外學位生數小計']),y:highlight.map(p=>p['實習參與率']),
-      marker:{size:11,color:'#E8603C',opacity:.95,line:{width:2,color:'#7A1E05'}},
-      text:highlight.map(p=>p['系所名稱']),textposition:'top center',textfont:{size:9,color:'#7A1E05'},
-      customdata:highlight.map(p=>[p['學校名稱'],p['系所名稱'],p['實習人次'],p['境外學位生數小計']]),
-      hovertemplate:'<b>%{customdata[0]}</b><br>%{customdata[1]}<br>在學境外生：%{customdata[3]} 人<br>實習參與率：%{y:.2f}<br>實習人次：%{customdata[2]:,}<extra></extra>',
-      name:schools.join('、'),showlegend:schools.length>0,
+    if (highlight.length) traces.push({
+      type: 'scatter', mode: 'markers+text',
+      x: highlight.map(p => p['境外學位生數小計']), y: highlight.map(p => p['實習參與率']),
+      marker: { size: 11, color: '#E8603C', opacity: .95, line: { width: 2, color: '#7A1E05' } },
+      text: highlight.map(p => p['系所名稱']),
+      textposition: 'top center', textfont: { size: 9, color: '#7A1E05' },
+      customdata: highlight.map(p => [p['學校名稱'], p['系所名稱'], p['實習人次'], p['境外學位生數小計']]),
+      hovertemplate: '<b>%{customdata[0]}</b><br>%{customdata[1]}<br>在學境外生：%{customdata[3]} 人<br>實習參與率：%{y:.2f}<br>實習人次：%{customdata[2]:,}<extra></extra>',
+      name: schools.join('、'), showlegend: schools.length > 0,
     });
-    const wrapper=document.createElement('div'); wrapper.style.marginBottom='1.5rem';
-    if(schools.length){ const tag=document.createElement('div'); tag.className='scatter-school-tag'; tag.textContent='🏫 高亮：'+(schools.length>2?schools.slice(0,2).join('、')+'…':schools.join('、')); wrapper.appendChild(tag); }
-    const cd=document.createElement('div'); wrapper.appendChild(cd); canvas.appendChild(wrapper);
-    Plotly.newPlot(cd,traces,{
-      title:{text:`${yrStr} 學年度｜系所產學轉化四象限`,font:{size:15},x:0.02},
-      xaxis:{title:'境外學位生數小計（人）',range:[0,xMax]},
-      yaxis:{title:'實習參與率',range:[0,yMax]},
-      shapes,
-      annotations:[
-        {x:xMax*.97,y:yMax*.97,text:'⭐ 高規模×高轉化',showarrow:false,font:{size:11,color:'#C94A28'},xanchor:'right'},
-        {x:mx*.03,y:yMax*.97,text:'高轉化×小規模',showarrow:false,font:{size:10,color:'#378ADD'},xanchor:'left'},
-        {x:xMax*.97,y:my*.05,text:'大規模×低轉化',showarrow:false,font:{size:10,color:'#D4892A'},xanchor:'right'},
+    const wrapper = document.createElement('div');
+    wrapper.style.marginBottom = '1.5rem';
+    if (schools.length) {
+      const tag = document.createElement('div');
+      tag.className = 'scatter-school-tag';
+      tag.textContent = '🏫 高亮：' + (schools.length > 2 ? schools.slice(0,2).join('、') + '…' : schools.join('、'));
+      wrapper.appendChild(tag);
+    }
+    const cd = document.createElement('div');
+    wrapper.appendChild(cd);
+    canvas.appendChild(wrapper);
+    Plotly.newPlot(cd, traces, {
+      title: { text: yrStr + ' 學年度｜系所產學轉化四象限', font: { size: 15 }, x: 0.02 },
+      xaxis: { title: '境外學位生數小計（人）', range: [0, xMax] },
+      yaxis: { title: '實習參與率', range: [0, yMax] },
+      shapes: [
+        { type:'rect', x0:mx, y0:my, x1:xMax, y1:yMax, fillcolor:'rgba(234,243,222,.5)', line:{width:0}, layer:'below' },
+        { type:'rect', x0:0,  y0:my, x1:mx,   y1:yMax, fillcolor:'rgba(230,241,251,.3)', line:{width:0}, layer:'below' },
+        { type:'rect', x0:mx, y0:0,  x1:xMax, y1:my,   fillcolor:'rgba(250,238,218,.3)', line:{width:0}, layer:'below' },
+        { type:'rect', x0:0,  y0:0,  x1:mx,   y1:my,   fillcolor:'rgba(240,240,240,.3)', line:{width:0}, layer:'below' },
+        { type:'line', x0:mx, x1:mx, y0:0, y1:yMax, line:{color:'#AAA',width:1,dash:'dot'} },
+        { type:'line', x0:0, x1:xMax, y0:my, y1:my, line:{color:'#AAA',width:1,dash:'dot'} },
       ],
-      plot_bgcolor:'#FDF6F2',paper_bgcolor:'#FFFFFF',
-      margin:{l:70,r:40,t:65,b:55},height:500,legend:{x:1.01,y:1},
-    },{responsive:true});
+      annotations: [
+        { x:xMax*.97, y:yMax*.97, text:'⭐ 高規模×高轉化', showarrow:false, font:{size:11,color:'#C94A28'}, xanchor:'right' },
+        { x:mx*.03,   y:yMax*.97, text:'高轉化×小規模',   showarrow:false, font:{size:10,color:'#378ADD'}, xanchor:'left' },
+        { x:xMax*.97, y:my*.05,   text:'大規模×低轉化',   showarrow:false, font:{size:10,color:'#D4892A'}, xanchor:'right' },
+      ],
+      plot_bgcolor: '#FDF6F2', paper_bgcolor: '#FFFFFF',
+      margin: { l:70, r:40, t:65, b:55 }, height: 500,
+      legend: { x: 1.01, y: 1 },
+    }, { responsive: true });
   });
 }
 
-// ════ 頁三 ════
+// ══ 頁三 ══
 function renderP3() {
-  const years=getYears();
-  let fl=[...FL_DATA];
-  const latestYr=Math.max(...fl.map(r=>r['學年度']));
-  const showYr=years.length?Math.max(...years.map(Number)):latestYr;
-  const flLatest=fl.filter(r=>r['學年度']===showYr).sort((a,b)=>b['僑生在地貢獻度']-a['僑生在地貢獻度']);
-  Plotly.react('p3-funnel-container',[{
-    type:'funnel',
-    y:flLatest.map(r=>r['標準行業別']),
-    x:flLatest.map(r=>r['僑生在地貢獻度']),
-    texttemplate:'%{x:.1%}',
-    hovertemplate:'%{y}<br>僑生在地貢獻度：%{x:.1%}<extra></extra>',
-    marker:{color:flLatest.map(r=>iColor(r['標準行業別'])),line:{width:.5,color:'white'}},
-  }],{
-    title:{text:`僑生在地產業貢獻度（${showYr} 學年度）`,font:{size:15},x:0.02},
-    plot_bgcolor:'#FFFFFF',paper_bgcolor:'#FFFFFF',
-    margin:{l:220,r:60,t:70,b:40},height:580,
+  const years = getYears();
+  const allFlYrs = [...new Set(FL_DATA.map(r => r['學年度']))].sort();
+  const showYr   = years.length ? Math.max(...years.map(Number)) : Math.max(...allFlYrs);
+  const flLatest = FL_DATA.filter(r => r['學年度'] === showYr).sort((a,b) => b['僑生在地貢獻度'] - a['僑生在地貢獻度']);
+
+  Plotly.react('p3-funnel-container', [{
+    type: 'funnel',
+    y: flLatest.map(r => r['標準行業別']),
+    x: flLatest.map(r => r['僑生在地貢獻度']),
+    texttemplate: '%{x:.1%}',
+    hovertemplate: '%{y}<br>僑生在地貢獻度：%{x:.1%}<extra></extra>',
+    marker: { color: flLatest.map(r => iColor(r['標準行業別'])), line: { width: .5, color: 'white' } },
+  }], {
+    title: { text: '僑生在地產業貢獻度（' + showYr + ' 學年度）', font: { size: 15 }, x: 0.02 },
+    plot_bgcolor: '#FFFFFF', paper_bgcolor: '#FFFFFF',
+    margin: { l: 220, r: 60, t: 70, b: 40 }, height: 580,
   });
 
-  const top8=Object.entries(groupSum(FL_DATA,'標準行業別','僑生有效聘僱許可人次')).sort((a,b)=>b[1]-a[1]).slice(0,8).map(e=>e[0]);
-  const allYrs=years.length?years.map(Number):[...new Set(FL_DATA.map(r=>r['學年度']))].sort();
-  Plotly.react('p3-trend-container',top8.map(ind=>{
-    const d=FL_DATA.filter(r=>r['標準行業別']===ind&&allYrs.includes(r['學年度'])).sort((a,b)=>a['學年度']-b['學年度']);
+  const indTotals = groupSum(FL_DATA, '標準行業別', '僑生有效聘僱許可人次');
+  const top8 = Object.keys(indTotals).sort((a,b) => indTotals[b] - indTotals[a]).slice(0, 8);
+  const showYrs = years.length ? years.map(Number) : allFlYrs;
+
+  Plotly.react('p3-trend-container', top8.map(ind => {
+    const d = FL_DATA.filter(r => r['標準行業別'] === ind && showYrs.includes(r['學年度'])).sort((a,b) => a['學年度'] - b['學年度']);
     return {
-      type:'scatter',mode:'lines+markers',name:ind,
-      x:d.map(r=>r['學年度']),y:d.map(r=>r['僑生在地貢獻度']),
-      line:{color:iColor(ind),width:2.5},marker:{size:7},
-      hovertemplate:ind+'<br>%{x}年：%{y:.1%}<extra></extra>',
+      type: 'scatter', mode: 'lines+markers', name: ind,
+      x: d.map(r => r['學年度']), y: d.map(r => r['僑生在地貢獻度']),
+      line: { color: iColor(ind), width: 2.5 }, marker: { size: 7 },
+      hovertemplate: ind + '<br>%{x}年：%{y:.1%}<extra></extra>',
     };
-  }),{
-    title:{text:'僑生在地貢獻度年度趨勢',font:{size:15},x:0.02},
-    xaxis:{tickvals:allYrs,title:'學年度'},
-    yaxis:{title:'僑生在地貢獻度',tickformat:'.0%'},
-    legend:{orientation:'v',x:1.01,y:1},
-    plot_bgcolor:'#FDF6F2',paper_bgcolor:'#FFFFFF',
-    margin:{l:70,r:220,t:60,b:40},height:420,
+  }), {
+    title: { text: '僑生在地貢獻度年度趨勢', font: { size: 15 }, x: 0.02 },
+    xaxis: { tickvals: showYrs, title: '學年度' },
+    yaxis: { title: '僑生在地貢獻度', tickformat: '.0%' },
+    legend: { orientation: 'v', x: 1.01, y: 1 },
+    plot_bgcolor: '#FDF6F2', paper_bgcolor: '#FFFFFF',
+    margin: { l: 70, r: 220, t: 60, b: 40 }, height: 420,
   });
+
+  const mfgRow = FL_DATA.filter(r => r['標準行業別'] === '製造業' && r['學年度'] === showYr);
+  const mfgVal = mfgRow.length ? mfgRow[0]['僑生在地貢獻度'] : INIT_MFG_CONTRIB;
+  document.getElementById('kv-mfg').textContent = (mfgVal * 100).toFixed(1) + '%';
+  document.getElementById('kl-mfg').textContent = '製造業在地貢獻度（' + showYr + ' 年）';
 }
 
-// ════ 頁四：桑基圖 ════
+// ══ 頁四：桑基圖 ══
 function renderSankey() {
-  const years=getYears(), schools=getSchools();
-  let data=[...SANKEY_RAW];
-  if(years.length)   data=data.filter(r=>years.includes(String(r['學年度'])));
-  if(schools.length) {
-    data=data.filter(r=>schools.includes(r['學校名稱']));
+  const years = getYears(), schools = getSchools();
+  let data = [...FI_DATA];
+  if (years.length)   data = data.filter(r => years.includes(String(r['學年度'])));
+  if (schools.length) {
+    data = data.filter(r => schools.includes(r['學校名稱']));
   } else {
-    // 預設 Top 15
-    const schSum=groupSum(data,'學校名稱','實習人次');
-    const top15=Object.keys(schSum).sort((a,b)=>schSum[b]-schSum[a]).slice(0,15);
-    data=data.filter(r=>top15.includes(r['學校名稱']));
+    const schSum = groupSum(data, '學校名稱', '實習人次');
+    const top15  = Object.keys(schSum).sort((a,b) => schSum[b] - schSum[a]).slice(0, 15);
+    data = data.filter(r => top15.includes(r['學校名稱']));
   }
-  // 彙總
-  const agg={};
-  data.forEach(r=>{
-    const k=r['學校名稱']+'|||'+r['標準行業別'];
-    agg[k]=(agg[k]||0)+r['實習人次'];
+  const agg = {};
+  data.forEach(r => {
+    const k = r['學校名稱'] + '|||' + r['標準行業別'];
+    agg[k] = (agg[k] || 0) + r['實習人次'];
   });
-  const minFlow=schools.length?1:500;
-  const links=Object.entries(agg).filter(([,v])=>v>=minFlow).map(([k,v])=>{
-    const [s,t]=k.split('|||'); return {source:s,target:t,value:v};
+  const minFlow = schools.length ? 1 : 500;
+  const links = Object.entries(agg).filter(([,v]) => v >= minFlow).map(([k,v]) => {
+    const [s,t] = k.split('|||');
+    return { source: s, target: t, value: v };
   });
-  if(!links.length){ document.getElementById('sankey-canvas').innerHTML='<p style="padding:2rem;color:#999">目前篩選條件下無足夠資料顯示桑基圖。</p>'; return; }
+  if (!links.length) {
+    document.getElementById('sankey-canvas').innerHTML = '<p style="padding:2rem;color:#999">目前篩選條件下無足夠資料顯示桑基圖。</p>';
+    return;
+  }
+  const schoolNodes = [...new Set(links.map(l => l.source))];
+  const indNodes    = [...new Set(links.map(l => l.target))];
+  const allNodes    = [...schoolNodes, ...indNodes];
+  const idx = Object.fromEntries(allNodes.map((n,i) => [n,i]));
+  const titleYr  = years.length ? years.join('、') : '110–113';
+  const titleSch = schools.length ? schools.join('、') : 'Top 15 學校';
 
-  const schoolNodes=[...new Set(links.map(l=>l.source))];
-  const indNodes   =[...new Set(links.map(l=>l.target))];
-  const allNodes   =[...schoolNodes,...indNodes];
-  const idx=Object.fromEntries(allNodes.map((n,i)=>[n,i]));
-  const titleYr  =years.length?years.join('、'):'110–113';
-  const titleSch =schools.length?schools.join('、'):'Top 15 學校';
-
-  Plotly.react('sankey-canvas',[{
-    type:'sankey',
-    node:{
-      pad:18,thickness:20,label:allNodes,
-      color:[...schoolNodes.map(()=>'#E8603C'),...indNodes.map(n=>iColor(n))],
-      hovertemplate:'%{label}<br>總實習人次：%{value:,}<extra></extra>',
+  Plotly.react('sankey-canvas', [{
+    type: 'sankey',
+    node: {
+      pad: 18, thickness: 20, label: allNodes,
+      color: [...schoolNodes.map(() => '#E8603C'), ...indNodes.map(n => iColor(n))],
+      hovertemplate: '%{label}<br>總實習人次：%{value:,}<extra></extra>',
     },
-    link:{
-      source:links.map(l=>idx[l.source]),
-      target:links.map(l=>idx[l.target]),
-      value:links.map(l=>l.value),
-      color:'rgba(232,96,60,0.18)',
-      hovertemplate:'%{source.label} → %{target.label}<br>實習人次：%{value:,}<extra></extra>',
+    link: {
+      source: links.map(l => idx[l.source]),
+      target: links.map(l => idx[l.target]),
+      value:  links.map(l => l.value),
+      color: 'rgba(232,96,60,0.18)',
+      hovertemplate: '%{source.label} → %{target.label}<br>實習人次：%{value:,}<extra></extra>',
     },
-  }],{
-    title:{text:`畢業流向桑基圖 ｜ ${titleSch} ｜ ${titleYr} 學年度`,font:{size:14},x:0.02},
-    paper_bgcolor:'#FFFFFF',
-    margin:{l:20,r:20,t:70,b:20},height:650,font_size:11,
-  },{responsive:true});
+  }], {
+    title: { text: '畢業流向桑基圖 ｜ ' + titleSch + ' ｜ ' + titleYr + ' 學年度', font: { size: 14 }, x: 0.02 },
+    paper_bgcolor: '#FFFFFF',
+    margin: { l: 20, r: 20, t: 70, b: 20 }, height: 650, font_size: 11,
+  }, { responsive: true });
 }
 
 function resetFilters() {
-  Array.from(selYear.options).forEach(o=>{ o.selected=o.value==='all'; });
-  Array.from(selSchool.options).forEach(o=>{ o.selected=o.value==='all'; });
-  document.getElementById('filter-status').style.display='none';
+  Array.from(selYear.options).forEach(o => { o.selected = o.value === 'all'; });
+  Array.from(selSchool.options).forEach(o => { o.selected = o.value === 'all'; });
+  document.getElementById('filter-status').style.display = 'none';
   applyFilters();
 }
 
-// ════ 熱圖（靜態，一次性渲染）════
-function renderHeatmap(fiData) {
-  const schSum=groupSum(fiData,'學校名稱','實習人次');
-  const top20=Object.keys(schSum).sort((a,b)=>schSum[b]-schSum[a]).slice(0,20);
-  const fi20=fiData.filter(r=>top20.includes(r['學校名稱']));
-  const inds=[...new Set(fi20.map(r=>r['標準行業別']))];
-  const pivot={};
-  fi20.forEach(r=>{ if(!pivot[r['學校名稱']]) pivot[r['學校名稱']]={}; pivot[r['學校名稱']][r['標準行業別']]=(pivot[r['學校名稱']][r['標準行業別']]||0)+r['實習人次']; });
-  const schools=Object.keys(pivot).sort((a,b)=>schSum[b]-schSum[a]);
-  Plotly.react('p1-heat-container',[{
-    type:'heatmap',
-    z:schools.map(s=>inds.map(i=>pivot[s][i]||0)),
-    x:inds,y:schools,
-    colorscale:[[0,'#FDF6F2'],[.3,'#F4956E'],[.7,'#E8603C'],[1,'#7A1E05']],
-    hovertemplate:'學校：%{y}<br>行業：%{x}<br>實習人次：%{z:,}<extra></extra>',
-  }],{
-    title:{text:'產學熱圖：Top 20 學校 × 行業別',font:{size:16},x:0.02},
-    xaxis:{tickangle:-40,tickfont:{size:11}},
-    yaxis:{tickfont:{size:11}},
-    plot_bgcolor:'#FFFFFF',paper_bgcolor:'#FFFFFF',
-    margin:{l:180,r:60,t:60,b:140},height:550,
-  },{responsive:true});
-}
-
-// ════ 資料載入（fetch）════
+// ══ fetch 載入資料 ══
 async function loadData() {
-  const base = window.location.href.includes('github.io')
-    ? window.location.origin + '/' + window.location.pathname.split('/')[1]
-    : '.';
+  const loc  = window.location.href;
+  const base = loc.substring(0, loc.lastIndexOf('/'));
   try {
-    const [r1,r2,r3,r4] = await Promise.all([
-      fetch(base+'/data/fi_data.json'),
-      fetch(base+'/data/fa_kpi.json'),
-      fetch(base+'/data/scatter_data.json'),
-      fetch(base+'/data/fl_data.json'),
+    const [r1, r2, r3, r4] = await Promise.all([
+      fetch(base + '/data/fi_data.json'),
+      fetch(base + '/data/fa_kpi.json'),
+      fetch(base + '/data/scatter_data.json'),
+      fetch(base + '/data/fl_data.json'),
     ]);
-    [FI_DATA, FA_KPI, SCATTER_DATA, FL_DATA] = await Promise.all([r1.json(),r2.json(),r3.json(),r4.json()]);
-    SANKEY_RAW = [...FI_DATA];
+    if (!r1.ok || !r2.ok || !r3.ok || !r4.ok) throw new Error('部分資料檔案回應異常');
+    [FI_DATA, FA_KPI, SCATTER_DATA, FL_DATA] = await Promise.all([r1.json(), r2.json(), r3.json(), r4.json()]);
 
-    // 初始渲染
     applyFilters();
-    renderHeatmap(FI_DATA);
+    renderHeatmap();
     renderP3();
     renderSankey();
 
-    // 隱藏載入畫面
-    document.getElementById('loading-screen').style.display='none';
+    document.getElementById('loading-screen').style.display = 'none';
   } catch(e) {
-    document.getElementById('loading-screen').innerHTML=
-      '<div style="font-size:14px;color:#C94A28;padding:2rem;text-align:center">❌ 資料載入失敗。<br>請確認 data/ 資料夾與 index.html 在同一目錄。<br><small>'+e.message+'</small></div>';
+    document.getElementById('loading-screen').innerHTML =
+      '<div style="font-size:14px;color:#C94A28;padding:2rem;text-align:center">' +
+      '❌ 資料載入失敗<br><small>' + e.message + '</small><br><br>' +
+      '請確認 data/ 資料夾與 index.html 在同一目錄，<br>且已部署至 GitHub Pages（本機直接開啟無法 fetch）。</div>';
   }
 }
 
